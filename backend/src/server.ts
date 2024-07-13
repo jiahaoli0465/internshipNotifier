@@ -111,6 +111,32 @@ cron.schedule("0 */2 * * *", async () => {
 });
 
 // Initial fetching of postings when the server starts
+
+const { auth } = require("express-openid-connect");
+
+const config = {
+  authRequired: false,
+  auth0Logout: true,
+  secret: "a long, randomly-generated string stored in env",
+  baseURL: "http://localhost:8888",
+  clientID: "XrBQp4XfCzkUp6y9zgDhSi47JW40wQAj",
+  issuerBaseURL: "https://dev-8h7inqw05fejvpdj.us.auth0.com",
+};
+
+// auth router attaches /login, /logout, and /callback routes to the baseURL
+app.use(auth(config));
+
+// req.isAuthenticated is provided from the auth router
+app.get("/test", (req, res) => {
+  res.send(req.oidc?.isAuthenticated() ? "Logged in" : "Logged out");
+});
+
+const { requiresAuth } = require("express-openid-connect");
+
+app.get("/profile", requiresAuth(), (req, res) => {
+  res.send(JSON.stringify(req.oidc?.user));
+});
+
 (async () => {
   await updatePostings();
 })();
@@ -119,7 +145,7 @@ app.get("/", (req, res) => {
   res.send("Hello from the backend!");
 });
 
-app.get("/postings", (req, res) => {
+app.get("/postings", requiresAuth(), (req, res) => {
   res.json(currentPostings);
 });
 
