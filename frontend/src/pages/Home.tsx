@@ -1,7 +1,12 @@
 import React from "react";
+import Hero from "../components/Home/Hero";
 
 const Home: React.FC = () => {
-  return <h1 className="text-3xl font-bold underline">Hello world! to me LLeo changed</h1>;
+  return (
+    <>
+      <Hero />
+    </>
+  );
 };
 
 export default Home;
