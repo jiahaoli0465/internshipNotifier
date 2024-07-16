@@ -2,6 +2,7 @@ import React from "react";
 import { Outlet, Link } from "react-router-dom";
 import styled from "styled-components";
 
+
 // Styled components for the navbar
 const Navbar = styled.nav`
   background-color: #fbf5f1;
@@ -10,13 +11,16 @@ const Navbar = styled.nav`
   align-items: center;
   padding: 20px 40px;
   height: 80px;
+  font-family: 'Poppins', sans-serif;
 `;
 
 const Logo = styled.div`
   font-weight: bold;
-  font-size: 28px;
+  font-size: 45px;
+  font-family: 'Poppins', sans-serif;
   display: flex;
   align-items: center;
+  margin : 
 `;
 
 const LogoSpan = styled.span`
@@ -29,6 +33,7 @@ const NavLinks = styled.ul`
   margin: 0;
   padding: 0;
   align-items: center;
+  font-family: 'Poppins', sans-serif;
 `;
 
 const NavLink = styled(Link)`
@@ -36,7 +41,7 @@ const NavLink = styled(Link)`
   text-decoration: none;
   margin: 0 20px;
   font-size: 20px;
-
+  font-family: 'Poppins', sans-serif;
   &:hover {
     color: #bf0a0a;
     text-decoration: underline;
@@ -46,6 +51,7 @@ const NavLink = styled(Link)`
 const AuthButtons = styled.div`
   display: flex;
   align-items: center;
+  font-family: 'Poppins', sans-serif;
 `;
 
 const AuthLink = styled(Link)`
@@ -53,7 +59,7 @@ const AuthLink = styled(Link)`
   text-decoration: none;
   margin: 0 20px;
   font-size: 20px;
-
+  font-family: 'Poppins', sans-serif;
   &:hover {
     // font-weight: bold;
   }
@@ -68,6 +74,7 @@ const SignUpButton = styled(Link)`
   font-size: 20px;
   cursor: pointer;
   text-decoration: none;
+  font-family: 'Poppins', sans-serif;
 
   &:hover {
     background-color: #a00a0a;
