@@ -1,12 +1,13 @@
 import React from "react";
+import JobListings from "../components/Listings/JobListings";
 
 
-const Home: React.FC = () => {
+const Listings: React.FC = () => {
   return (
     <>
-      listings
+      <JobListings/>
     </>
   );
 };
 
-export default Home;
+export default Listings;

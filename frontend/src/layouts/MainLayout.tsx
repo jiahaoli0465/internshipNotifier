@@ -90,7 +90,7 @@ const MainLayout: React.FC = () => {
               <NavLink to="/pricing">Pricing</NavLink>
             </li>
             <li>
-              <NavLink to="/job-listings">Job Listings</NavLink>
+              <NavLink to="/listings">Job Listings</NavLink>
             </li>
           </NavLinks>
           <AuthButtons>
@@ -99,7 +99,7 @@ const MainLayout: React.FC = () => {
           </AuthButtons>
         </Navbar>
       </header>
-      <main>
+      <main style={{backgroundColor: "#FBF5F1"}}>
         <Outlet />
       </main>
     </div>
