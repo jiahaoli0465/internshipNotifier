@@ -1,5 +1,5 @@
 import React from "react";
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 // Styled components for the navbar
@@ -17,6 +17,9 @@ const Logo = styled.div`
   font-size: 28px;
   display: flex;
   align-items: center;
+  &:hover {
+    cursor: pointer;
+    }
 `;
 
 const LogoSpan = styled.span`
@@ -75,16 +78,17 @@ const SignUpButton = styled(Link)`
 `;
 
 const MainLayout: React.FC = () => {
+  const navigate = useNavigate();
   return (
     <div>
       <header>
         <Navbar>
-          <Logo>
+          <Logo onClick={()=> navigate('/')}>
             Intern<LogoSpan>ly</LogoSpan>
           </Logo>
           <NavLinks>
             <li>
-              <NavLink to="/demos">Demos</NavLink>
+              <NavLink to="/">Home</NavLink>
             </li>
             <li>
               <NavLink to="/pricing">Pricing</NavLink>
