@@ -16,17 +16,15 @@ const Navbar = styled.nav`
 
 const Logo = styled.div`
   font-weight: bold;
-  font-size: 45px;
+  font-size: 40px;
   font-family: 'Poppins', sans-serif;
   display: flex;
   align-items: center;
-<<<<<<< HEAD
-  margin : 
-=======
+  padding-top: 60px;
+  padding-left: 80px;
   &:hover {
     cursor: pointer;
     }
->>>>>>> origin/main
 `;
 
 const LogoSpan = styled.span`
@@ -39,6 +37,8 @@ const NavLinks = styled.ul`
   margin: 0;
   padding: 0;
   align-items: center;
+  padding-top: 60px;
+  padding-left: 200px;
   font-family: 'Poppins', sans-serif;
 `;
 
@@ -46,7 +46,7 @@ const NavLink = styled(Link)`
   color: #000000;
   text-decoration: none;
   margin: 0 20px;
-  font-size: 20px;
+  font-size: 16px;
   font-family: 'Poppins', sans-serif;
   &:hover {
     color: #bf0a0a;
