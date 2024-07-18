@@ -1,5 +1,6 @@
 import React from 'react';
 import { Paper, Box, Typography, Button, Link, Grid } from '@mui/material';
+import { styled } from '@mui/system';
 
 interface JobListingProps {
   company: string;
@@ -9,59 +10,63 @@ interface JobListingProps {
   date_posted: string;
 }
 
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(3),
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'space-between',
+  height: '100%',
+  borderRadius: theme.spacing(2),
+  backgroundColor: '#ffffff',
+  transition: 'box-shadow 0.3s ease-in-out',
+  '&:hover': {
+    boxShadow: '0 8px 16px 0 rgba(0,0,0,0.1)',
+  },
+}));
+
 const JobListing: React.FC<JobListingProps> = ({ company, role, location, link, date_posted }) => (
   <Grid item xs={12} sm={6} md={4}>
-    <Paper
-      elevation={3}
-      sx={{
-        padding: 2,
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        minHeight: 200,
-        height: 250,
-        borderRadius: 4, // Slightly rounder corners
-        backgroundColor: '#D9D9D9', 
-      }}
-    >
+    <StyledPaper elevation={1}>
       <Box>
-        <Typography variant="h6" component="div" gutterBottom>
+        <Typography variant="h6" component="div" gutterBottom fontWeight="bold">
           {role}
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 1 }}>
-          <strong>Company:</strong> {company || 'Unknown'}
+        <Typography variant="body2" color="text.primary" sx={{ mb: 1 }}>
+          {company || 'Unknown'}
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 1 }}>
-          <strong>Location:</strong> {location}
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+          {location}
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 1 }}>
-          <strong>Date Posted:</strong> {date_posted}
+        <Typography variant="caption" color="text.secondary">
+          Posted: {date_posted}
         </Typography>
       </Box>
       {link && (
         <Box mt={2}>
-  <Button
-    variant="contained"
-    component={Link}
-    href={link}
-    target="_blank"
-    rel="noopener"
-    sx={{
-      borderRadius: '20px', // Capsule border radius
-      backgroundColor: "#bf0a0a",
-      textTransform: 'none', // Keep the text case as is
-
-      fontSize: '12px',
-      '&:hover': {
-        backgroundColor: "#a00a0a"
-      }
-    }}
-  >
-    Apply
-  </Button>
+          <Button
+            variant="outlined"
+            component={Link}
+            href={link}
+            target="_blank"
+            rel="noopener"
+            fullWidth
+            sx={{
+              borderRadius: '8px',
+              textTransform: 'none',
+              fontWeight: 'medium',
+              borderColor: 'primary.main',
+              color: 'primary.main',
+              '&:hover': {
+                backgroundColor: 'primary.main',
+                color: 'white',
+              },
+            }}
+          >
+            Apply Now
+          </Button>
         </Box>
       )}
-    </Paper>
+    </StyledPaper>
   </Grid>
 );
 
