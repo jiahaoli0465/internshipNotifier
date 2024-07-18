@@ -7,13 +7,23 @@ import * as cheerio from "cheerio";
 const app = express();
 const PORT = process.env.PORT || 8888;
 
-let currentPostings: any[] = [];
-let newPostings: any[] = [];
+interface Posting {
+  company: string;
+  role: string;
+  location: string;
+  link: string;
+  date_posted: string;
+}
 
-const URL =
-  "https://raw.githubusercontent.com/SimplifyJobs/Summer2025-Internships/dev/README.md";
+let currentPostings: Posting[] = [];
+let newPostings: Posting[] = [];
 
-const cleanCompanyName = (companyName: string): string => {
+const URL = "https://raw.githubusercontent.com/SimplifyJobs/Summer2025-Internships/dev/README.md";
+
+const cleanCompanyName = (companyName: string, lastCompany: string): string => {
+  if (companyName.trim() === "") {
+    return lastCompany;
+  }
   const cleanName = companyName.replace(/\*\*\[(.*?)\]\(.*?\)\*\*/, "$1");
   return cleanName;
 };
@@ -24,18 +34,13 @@ const cleanText = (text: string): string => {
   return text;
 };
 
-const fetchPostings = async (): Promise<any[]> => {
+const fetchPostings = async (): Promise<Posting[]> => {
   try {
     const response = await axios.get(URL);
     const content = response.data;
 
-    const tableStart = content.indexOf(
-      "| Company | Role | Location | Application/Link | Date Posted |"
-    );
-    const tableEnd = content.indexOf(
-      "<!-- Please leave a one line gap between this and the table TABLE_END (DO NOT CHANGE THIS LINE) -->",
-      tableStart
-    );
+    const tableStart = content.indexOf("| Company | Role | Location | Application/Link | Date Posted |");
+    const tableEnd = content.indexOf("<!-- Please leave a one line gap between this and the table TABLE_END (DO NOT CHANGE THIS LINE) -->", tableStart);
 
     if (tableStart === -1 || tableEnd === -1) {
       console.log("Table not found in the content");
@@ -45,8 +50,8 @@ const fetchPostings = async (): Promise<any[]> => {
     const tableContent = content.slice(tableStart, tableEnd).trim().split("\n");
     const tableRows = tableContent.slice(2);
 
-    const postings = [];
-    let lastCompany: string | null = null;
+    const postings: Posting[] = [];
+    let lastCompany: string = "Unknown Company";
 
     for (const row of tableRows) {
       if (row.trim() === "") {
@@ -59,16 +64,19 @@ const fetchPostings = async (): Promise<any[]> => {
         continue;
       }
 
-      let company =
-        cleanCompanyName(cols[0].trim().replace("\u21b3", "")) ?? lastCompany;
+      let company = cleanCompanyName(cols[0].trim().replace("\u21b3", ""), lastCompany);
       const role = cleanText(cols[1].trim());
       const location = cleanText(cols[2].replace("</br>", ", ").trim());
       const $ = cheerio.load(cols[3].trim());
       const link = $("a").attr("href") || "N/A";
       const datePosted = cols[4].trim();
 
+      if (company !== "") {
+        lastCompany = company;
+      }
+
       postings.push({
-        company,
+        company: lastCompany,
         role,
         location,
         link,
@@ -83,13 +91,9 @@ const fetchPostings = async (): Promise<any[]> => {
   }
 };
 
-const findNewPostings = (oldPostings: any[], newPostings: any[]): any[] => {
-  const oldPostingsSet = new Set(
-    oldPostings.map((posting) => JSON.stringify(posting))
-  );
-  return newPostings.filter(
-    (posting) => !oldPostingsSet.has(JSON.stringify(posting))
-  );
+const findNewPostings = (oldPostings: Posting[], newPostings: Posting[]): Posting[] => {
+  const oldPostingsSet = new Set(oldPostings.map((posting) => JSON.stringify(posting)));
+  return newPostings.filter((posting) => !oldPostingsSet.has(JSON.stringify(posting)));
 };
 
 const updatePostings = async () => {
