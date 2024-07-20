@@ -70,7 +70,14 @@ const Pricing: React.FC = () => {
                 }}
               />
               <CardContent>
-                <Box sx={{ display: "flex", justifyContent: "center", alignItems: "baseline", mb: 2 }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "baseline",
+                    mb: 2,
+                  }}
+                >
                   <Typography component="h2" variant="h3" color="textPrimary">
                     {option.price}
                   </Typography>
@@ -80,14 +87,23 @@ const Pricing: React.FC = () => {
                 </Typography>
                 <ul>
                   {option.features.map((feature) => (
-                    <Typography component="li" variant="subtitle1" align="left" key={feature}>
+                    <Typography
+                      component="li"
+                      variant="subtitle1"
+                      align="left"
+                      key={feature}
+                    >
                       {feature}
                     </Typography>
                   ))}
                 </ul>
               </CardContent>
               <CardActions>
-                <Button fullWidth variant={option.title === "Pro" ? "contained" : "outlined"} color="primary">
+                <Button
+                  fullWidth
+                  variant={option.title === "Pro" ? "contained" : "outlined"}
+                  color="primary"
+                >
                   {option.buttonText}
                 </Button>
               </CardActions>
