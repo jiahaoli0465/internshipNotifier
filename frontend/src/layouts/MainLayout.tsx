@@ -1,122 +1,203 @@
-import React from "react";
-import { Outlet, Link, useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import React, { useState } from "react";
+import {
+  Outlet,
+  Link as RouterLink,
+  useNavigate,
+  LinkProps as RouterLinkProps,
+} from "react-router-dom";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Container,
+  Box,
+  Link as MuiLink,
+  Stack,
+  ButtonProps,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  useMediaQuery,
+  Theme,
+} from "@mui/material";
+import { styled, useTheme } from "@mui/material/styles";
+import MenuIcon from "@mui/icons-material/Menu";
 
+// Custom component to combine MUI Link and React Router Link
+const NavLink = React.forwardRef<
+  HTMLAnchorElement,
+  RouterLinkProps & { children: React.ReactNode }
+>((props, ref) => <MuiLink component={RouterLink} ref={ref} {...props} />);
 
-// Styled components for the navbar
-const Navbar = styled.nav`
-  background-color: #fbf5f1;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 40px;
-  height: 80px;
-  font-family: 'Poppins', sans-serif;
-`;
+// Custom component to combine MUI Button and React Router Link
+const LinkButton = React.forwardRef<
+  HTMLAnchorElement,
+  ButtonProps & RouterLinkProps & { to: string; children: React.ReactNode }
+>((props, ref) => <Button component={RouterLink} ref={ref} {...props} />);
 
-const Logo = styled.div`
-  font-weight: bold;
-  font-size: 40px;
-  font-family: 'Poppins', sans-serif;
-  display: flex;
-  align-items: center;
-  padding-top: 60px;
-  padding-left: 80px;
-  &:hover {
-    cursor: pointer;
-    }
-`;
+const StyledAppBar = styled(AppBar)(({ theme }) => ({
+  backgroundColor: "#fbf5f1",
+  boxShadow: "none",
+  padding: theme.spacing(2, 0),
+}));
 
-const LogoSpan = styled.span`
-  color: #bf0a0a;
-`;
+const Logo = styled(Typography)<{ component?: React.ElementType }>(
+  ({ theme }) => ({
+    fontWeight: "bold",
+    fontSize: "2rem",
+    fontFamily: "Poppins, sans-serif",
+    color: theme.palette.text.primary,
+    cursor: "pointer",
+  })
+);
 
-const NavLinks = styled.ul`
-  display: flex;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  align-items: center;
-  padding-top: 60px;
-  padding-left: 200px;
-  font-family: 'Poppins', sans-serif;
-`;
+const LogoSpan = styled("span")(({ theme }) => ({
+  color: theme.palette.error.main,
+}));
 
-const NavLink = styled(Link)`
-  color: #000000;
-  text-decoration: none;
-  margin: 0 20px;
-  font-size: 16px;
-  font-family: 'Poppins', sans-serif;
-  &:hover {
-    color: #bf0a0a;
-    text-decoration: underline;
-  }
-`;
+const StyledNavLink = styled(NavLink)(({ theme }) => ({
+  color: theme.palette.text.primary,
+  textDecoration: "none",
+  margin: theme.spacing(0, 2),
+  fontSize: "1rem",
+  fontFamily: "Poppins, sans-serif",
+  "&:hover": {
+    color: theme.palette.error.main,
+    textDecoration: "underline",
+  },
+}));
 
-const AuthButtons = styled.div`
-  display: flex;
-  align-items: center;
-  font-family: 'Poppins', sans-serif;
-`;
+const AuthLink = styled(LinkButton)(({ theme }) => ({
+  color: theme.palette.error.main,
+  padding: theme.spacing(1, 3),
+  borderRadius: 25,
+  textDecoration: "none",
+  fontSize: "1rem",
+  fontFamily: "Poppins, sans-serif",
+  textTransform: "none",
+}));
 
-const AuthLink = styled(Link)`
-  color: #bf0a0a;
-  text-decoration: none;
-  margin: 0 20px;
-  font-size: 20px;
-  font-family: 'Poppins', sans-serif;
-  &:hover {
-    // font-weight: bold;
-  }
-`;
-
-const SignUpButton = styled(Link)`
-  background-color: #bf0a0a;
-  color: #ffffff;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 25px;
-  font-size: 20px;
-  cursor: pointer;
-  text-decoration: none;
-  font-family: 'Poppins', sans-serif;
-
-  &:hover {
-    background-color: #a00a0a;
-  }
-`;
+const SignUpButton = styled(LinkButton)(({ theme }) => ({
+  backgroundColor: theme.palette.error.main,
+  color: theme.palette.common.white,
+  padding: theme.spacing(1, 3),
+  borderRadius: 25,
+  fontSize: "1rem",
+  textTransform: "none",
+  fontFamily: "Poppins, sans-serif",
+  "&:hover": {
+    backgroundColor: theme.palette.error.dark,
+  },
+}));
 
 const MainLayout: React.FC = () => {
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  const navItems = [
+    { name: "Home", path: "/" },
+    { name: "Pricing", path: "/pricing" },
+    { name: "Job Listings", path: "/listings" },
+  ];
+
+  const drawer = (
+    <Box onClick={handleDrawerToggle} sx={{ textAlign: "center", p: 2 }}>
+      <Typography variant="h6" sx={{ my: 2 }}>
+        Intern<span style={{ color: theme.palette.error.main }}>ly</span>
+      </Typography>
+      <List>
+        {navItems.map((item) => (
+          <ListItem key={item.name} disablePadding>
+            <StyledNavLink
+              to={item.path}
+              style={{ width: "100%", textAlign: "center", padding: "8px 0" }}
+            >
+              <ListItemText primary={item.name} />
+            </StyledNavLink>
+          </ListItem>
+        ))}
+        <ListItem disablePadding sx={{ justifyContent: "center", mt: 2 }}>
+          <AuthLink to="/login" sx={{ width: "80%", justifyContent: "center" }}>
+            Login
+          </AuthLink>
+        </ListItem>
+        <ListItem disablePadding sx={{ justifyContent: "center", mt: 2 }}>
+          <SignUpButton
+            to="/sign-up"
+            variant="contained"
+            sx={{ width: "80%", justifyContent: "center" }}
+          >
+            Sign Up
+          </SignUpButton>
+        </ListItem>
+      </List>
+    </Box>
+  );
+
   return (
-    <div>
-      <header>
-        <Navbar>
-          <Logo onClick={()=> navigate('/')}>
-            Intern<LogoSpan>ly</LogoSpan>
-          </Logo>
-          <NavLinks>
-            <li>
-              <NavLink to="/">Home</NavLink>
-            </li>
-            <li>
-              <NavLink to="/pricing">Pricing</NavLink>
-            </li>
-            <li>
-              <NavLink to="/listings">Job Listings</NavLink>
-            </li>
-          </NavLinks>
-          <AuthButtons>
-            <AuthLink to="/login">Login</AuthLink>
-            <SignUpButton to="/sign-up">Sign Up</SignUpButton>
-          </AuthButtons>
-        </Navbar>
-      </header>
-      <main style={{backgroundColor: "#FBF5F1"}}>
+    <Box sx={{ bgcolor: "#FBF5F1", minHeight: "100vh" }}>
+      <StyledAppBar position="static">
+        <Container maxWidth="lg">
+          <Toolbar disableGutters sx={{ justifyContent: "space-between" }}>
+            <Logo onClick={() => navigate("/")} component="h1">
+              Intern<LogoSpan>ly</LogoSpan>
+            </Logo>
+            {isMobile ? (
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                sx={{ color: theme.palette.text.primary }}
+                onClick={handleDrawerToggle}
+              >
+                <MenuIcon />
+              </IconButton>
+            ) : (
+              <Stack direction="row" spacing={2} alignItems="center">
+                {navItems.map((item) => (
+                  <StyledNavLink key={item.name} to={item.path}>
+                    {item.name}
+                  </StyledNavLink>
+                ))}
+                <Box sx={{ flexGrow: 1, width: "50px" }} />
+                <AuthLink to="/login">Login</AuthLink>
+                <SignUpButton to="/sign-up" variant="contained">
+                  Sign Up
+                </SignUpButton>
+              </Stack>
+            )}
+          </Toolbar>
+        </Container>
+      </StyledAppBar>
+      <Box component="nav">
+        <Drawer
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{
+            keepMounted: true,
+          }}
+          sx={{
+            display: { xs: "block", md: "none" },
+            "& .MuiDrawer-paper": { boxSizing: "border-box", width: 240 },
+          }}
+        >
+          {drawer}
+        </Drawer>
+      </Box>
+      <Container component="main" maxWidth="lg" sx={{ mt: 4 }}>
         <Outlet />
-      </main>
-    </div>
+      </Container>
+    </Box>
   );
 };
 
