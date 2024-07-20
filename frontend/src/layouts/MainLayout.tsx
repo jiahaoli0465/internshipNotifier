@@ -111,7 +111,17 @@ const MainLayout: React.FC = () => {
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center", p: 2 }}>
-      <Typography variant="h6" sx={{ my: 2 }}>
+      <Typography
+        variant="h6"
+        sx={{
+          my: 2,
+
+          "&:hover": {
+            cursor: "pointer",
+          },
+        }}
+        onClick={() => navigate("/")}
+      >
         Intern<span style={{ color: theme.palette.error.main }}>ly</span>
       </Typography>
       <List>
