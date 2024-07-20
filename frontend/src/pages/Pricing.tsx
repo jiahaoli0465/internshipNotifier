@@ -60,7 +60,9 @@ const Pricing: React.FC = () => {
       <Grid container spacing={4} alignItems="flex-end">
         {pricingOptions.map((option) => (
           <Grid item key={option.title} xs={12} sm={6}>
-            <Card>
+            <Card sx={{  '&:hover': {
+    boxShadow: '0 8px 16px 0 rgba(0,0,0,0.1)',
+  },}}>
               <CardHeader
                 title={option.title}
                 titleTypographyProps={{ align: "center" }}

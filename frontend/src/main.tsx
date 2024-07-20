@@ -6,6 +6,7 @@ import theme from './theme/theme.tsx' // Make sure this path is correct
 import App from './App.tsx'
 
 
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>

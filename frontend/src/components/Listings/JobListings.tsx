@@ -3,9 +3,10 @@ import { Container, Grid, Typography, Box, Chip, TextField, InputAdornment } fro
 import SearchIcon from '@mui/icons-material/Search';
 import WorkIcon from '@mui/icons-material/Work';
 import JobListing from './JobListing';
-import listings from '../../data/listings';
+import useListings from '../../hooks/useListings';
 
 const JobListings: React.FC = () => {
+  const listings = useListings();
   const totalListings = listings.length;
   const companies = [...new Set(listings.map(listing => listing.company))].length;
 
