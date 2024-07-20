@@ -26,12 +26,11 @@ interface PricingOption {
 const pricingOptions: PricingOption[] = [
   {
     title: "Basic",
-    price: "$9.99/month",
+    price: "$4.99/week",
     description: "Perfect for students starting their internship search",
     features: [
       "Daily email notifications",
-      "Access to 100+ internship listings",
-      "Basic company information",
+      "Full Access to all internship listings",
     ],
     buttonText: "Choose Basic",
   },
@@ -41,9 +40,33 @@ const pricingOptions: PricingOption[] = [
     description: "Ideal for serious applicants aiming for top-tier internships",
     features: [
       "Instant text & email notifications",
-      "Access to 500+ exclusive internship listings",
-      "Detailed company profiles and application tips",
-      "Resume review and optimization",
+      "Full Access to all internship listings",
+
+      "Resume review and optimization (10/month)",
+    ],
+    buttonText: "Coming Soon",
+    disabled: true,
+  },
+  {
+    title: "Premium Lite",
+    price: "$49.99",
+    description: "One-time payment for a lifetime of internship opportunities",
+    features: [
+      "Instant text & email notifications",
+      "Full Access to all internship listings",
+    ],
+    buttonText: "Choose Premium Lite",
+  },
+  {
+    title: "Premium Pro",
+    price: "69.99",
+    description:
+      "One-time payment for serious applicants aiming for top-tier internships",
+    features: [
+      "Instant text & email notifications",
+      "Full Access to all internship listings",
+
+      "Resume review and optimization (10/month)",
     ],
     buttonText: "Coming Soon",
     disabled: true,
@@ -63,10 +86,10 @@ const Pricing: React.FC = () => {
           Stay ahead in your internship search with our tailored plans
         </Typography>
       </Box>
-      <Grid container spacing={4}>
+      <Grid container spacing={4} width="100%">
         {pricingOptions.map((option) => (
           <Grid item key={option.title} xs={12} sm={6}>
-            {option.title === "Pro" ? (
+            {option.title.includes("Pro") ? (
               <BackgroundGradient animate={true}>
                 <Paper
                   elevation={3}
