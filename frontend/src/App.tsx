@@ -5,11 +5,12 @@ import MainLayout from "./layouts/MainLayout";
 import Home from "./pages/Home";
 import Pricing from "./pages/Pricing";
 import Contact from "./pages/Contact";
-import Listings from "./pages/Listings"
-import supabase from './config/supabaseClient'
+import Listings from "./pages/Listings";
+import supabase from "./config/supabaseClient";
+import "./index.css";
 
 const App: React.FC = () => {
-  console.log(supabase)
+  console.log(supabase);
   return (
     <Router>
       <Routes>
