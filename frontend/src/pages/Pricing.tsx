@@ -74,7 +74,7 @@ const Pricing: React.FC = () => {
                     borderRadius: "22px",
                     p: 3,
                     textAlign: "center",
-                    height: "540px",
+                    height: "536px",
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "space-between",
