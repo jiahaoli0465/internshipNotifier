@@ -6,8 +6,10 @@ import Home from "./pages/Home";
 import Pricing from "./pages/Pricing";
 import Contact from "./pages/Contact";
 import Listings from "./pages/Listings"
+import supabase from './config/supabaseClient'
 
 const App: React.FC = () => {
+  console.log(supabase)
   return (
     <Router>
       <Routes>

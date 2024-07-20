@@ -31,8 +31,20 @@ const cleanCompanyName = (companyName: string, lastCompany: string): string => {
 const cleanText = (text: string): string => {
   text = unescape(text);
   text = text.normalize("NFKC");
+  text = text.replace(/<\/?br\/?>/g, ", ").replace(/<[^>]*>/g, "").trim(); // Clean HTML tags and line breaks
   return text;
 };
+
+function cleanUrl(url: string): string {
+  const paramString = 'utm_source=Simplify&ref=Simplify';
+  const paramIndex = url.indexOf(paramString);
+  
+  if (paramIndex !== -1) {
+    return url.substring(0, paramIndex - 1); // Remove the parameters and the preceding '&' or '?'
+  }
+  
+  return url; // Return the original URL if the parameters are not found
+}
 
 const fetchPostings = async (): Promise<Posting[]> => {
   try {
@@ -65,10 +77,11 @@ const fetchPostings = async (): Promise<Posting[]> => {
       }
 
       let company = cleanCompanyName(cols[0].trim().replace("\u21b3", ""), lastCompany);
-      const role = cleanText(cols[1].trim());
+      let role = cleanText(cols[1].trim()).replace("🛂", "").trim();
       const location = cleanText(cols[2].replace("</br>", ", ").trim());
       const $ = cheerio.load(cols[3].trim());
-      const link = $("a").attr("href") || "N/A";
+      const rawLink = $("a").attr("href") || "N/A";
+      const link = cleanUrl(rawLink);
       const datePosted = cols[4].trim();
 
       if (company !== "") {
