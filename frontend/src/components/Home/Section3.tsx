@@ -1,18 +1,18 @@
 import React from "react";
 import {
-  Box,
-  Button,
   Container,
-  Grid,
   Typography,
-  useTheme,
-  Divider,
+  Box,
+  Paper,
+  Grid,
+  Button,
   List,
   ListItem,
   ListItemText,
-  Paper,
+  Divider,
 } from "@mui/material";
-import { BackgroundGradient } from "../components/aceternity/BackgroundGradient";
+import { useTheme } from "@mui/material/styles";
+import { BackgroundGradient } from "../../components/aceternity/BackgroundGradient";
 
 interface PricingOption {
   title: string;
@@ -41,7 +41,6 @@ const pricingOptions: PricingOption[] = [
     features: [
       "Instant text & email notifications",
       "Full Access to all internship listings",
-
       "Resume review and optimization (10/month)",
     ],
     buttonText: "Coming Soon",
@@ -59,13 +58,12 @@ const pricingOptions: PricingOption[] = [
   },
   {
     title: "Premium Pro",
-    price: "69.99",
+    price: "$69.99",
     description:
       "One-time payment for serious applicants aiming for top-tier internships",
     features: [
       "Instant text & email notifications",
       "Full Access to all internship listings",
-
       "Resume review and optimization (10/month)",
     ],
     buttonText: "Coming Soon",
@@ -73,31 +71,92 @@ const pricingOptions: PricingOption[] = [
   },
 ];
 
-const Pricing: React.FC = () => {
+export const Section3: React.FC = () => {
   const theme = useTheme();
 
   return (
-    <Container maxWidth="md" sx={{ py: 4 }}>
-      <Box textAlign="center" mb={4}>
-        <Typography variant="h2" gutterBottom>
-          Find Your Perfect Plan
+    <Box
+      sx={{
+        padding: "60px 20px",
+      }}
+    >
+      <Container maxWidth="lg">
+        <Typography
+          variant="h4"
+          component="h2"
+          gutterBottom
+          sx={{
+            color: theme.palette.text.primary,
+            fontWeight: "bold",
+            textAlign: "center",
+            marginBottom: "40px",
+          }}
+        >
+          Choose Your Plan
         </Typography>
-        <Typography variant="h5" color="textSecondary">
-          Stay ahead in your internship search with our tailored plans
-        </Typography>
-      </Box>
-      <Grid container spacing={4} width="100%">
-        {pricingOptions.map((option) => (
-          <Grid item key={option.title} xs={12} sm={6}>
-            {option.title.includes("Pro") ? (
-              <BackgroundGradient animate={true}>
+
+        <Grid container spacing={4} justifyContent="center">
+          {pricingOptions.map((option) => (
+            <Grid item key={option.title} xs={12} md={6}>
+              {option.title.includes("Pro") ? (
+                <BackgroundGradient animate={true}>
+                  <Paper
+                    elevation={3}
+                    sx={{
+                      borderRadius: "22px",
+                      p: 3,
+                      textAlign: "center",
+                      height: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "space-between",
+                      "&:hover": {
+                        boxShadow: "0 8px 16px 0 rgba(0,0,0,0.1)",
+                      },
+                    }}
+                  >
+                    <Box>
+                      <Typography variant="h4" color="primary" gutterBottom>
+                        {option.title}
+                      </Typography>
+                      <Typography variant="h3" color="textPrimary" gutterBottom>
+                        {option.price}
+                      </Typography>
+                      <Typography
+                        variant="subtitle1"
+                        color="textSecondary"
+                        paragraph
+                      >
+                        {option.description}
+                      </Typography>
+                      <Divider sx={{ mb: 2 }} />
+                      <List>
+                        {option.features.map((feature) => (
+                          <ListItem key={feature} disableGutters>
+                            <ListItemText primary={feature} />
+                          </ListItem>
+                        ))}
+                      </List>
+                    </Box>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="large"
+                      sx={{ mt: 3 }}
+                      disabled={option.disabled}
+                    >
+                      {option.buttonText}
+                    </Button>
+                  </Paper>
+                </BackgroundGradient>
+              ) : (
                 <Paper
                   elevation={3}
                   sx={{
                     borderRadius: "22px",
                     p: 3,
                     textAlign: "center",
-                    height: "536px",
+                    height: "100%",
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "space-between",
@@ -130,7 +189,7 @@ const Pricing: React.FC = () => {
                     </List>
                   </Box>
                   <Button
-                    variant={option.title === "Pro" ? "contained" : "outlined"}
+                    variant="outlined"
                     color="primary"
                     size="large"
                     sx={{ mt: 3 }}
@@ -139,62 +198,11 @@ const Pricing: React.FC = () => {
                     {option.buttonText}
                   </Button>
                 </Paper>
-              </BackgroundGradient>
-            ) : (
-              <Paper
-                elevation={3}
-                sx={{
-                  borderRadius: "22px",
-                  p: 3,
-                  textAlign: "center",
-                  height: "540px",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                  "&:hover": {
-                    boxShadow: "0 8px 16px 0 rgba(0,0,0,0.1)",
-                  },
-                }}
-              >
-                <Box>
-                  <Typography variant="h4" color="primary" gutterBottom>
-                    {option.title}
-                  </Typography>
-                  <Typography variant="h3" color="textPrimary" gutterBottom>
-                    {option.price}
-                  </Typography>
-                  <Typography
-                    variant="subtitle1"
-                    color="textSecondary"
-                    paragraph
-                  >
-                    {option.description}
-                  </Typography>
-                  <Divider sx={{ mb: 2 }} />
-                  <List>
-                    {option.features.map((feature) => (
-                      <ListItem key={feature} disableGutters>
-                        <ListItemText primary={feature} />
-                      </ListItem>
-                    ))}
-                  </List>
-                </Box>
-                <Button
-                  variant={option.title === "Pro" ? "contained" : "outlined"}
-                  color="primary"
-                  size="large"
-                  sx={{ mt: 3 }}
-                  disabled={option.disabled}
-                >
-                  {option.buttonText}
-                </Button>
-              </Paper>
-            )}
-          </Grid>
-        ))}
-      </Grid>
-    </Container>
+              )}
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+    </Box>
   );
 };
-
-export default Pricing;

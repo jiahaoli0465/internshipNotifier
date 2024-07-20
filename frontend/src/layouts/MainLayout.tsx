@@ -197,6 +197,17 @@ const MainLayout: React.FC = () => {
       <Container component="main" maxWidth="lg" sx={{ mt: 4 }}>
         <Outlet />
       </Container>
+      <footer
+        style={{
+          backgroundColor: "#FBF5F1",
+          padding: "16px",
+          textAlign: "center",
+        }}
+      >
+        <Typography variant="body2" color="textSecondary">
+          &copy; {new Date().getFullYear()} Internly. All rights reserved.
+        </Typography>
+      </footer>
     </Box>
   );
 };
