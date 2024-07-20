@@ -44,7 +44,7 @@ const Hero: React.FC = () => {
               sx={{
                 fontSize: { xs: "2.5rem", md: "3.5rem" },
                 fontWeight: 700,
-                fontFamily: "Poppins",
+                // fontFamily: "Poppins",
                 lineHeight: 1.2,
                 mb: 2,
               }}
@@ -55,7 +55,7 @@ const Hero: React.FC = () => {
               variant="body1"
               sx={{
                 fontSize: "1.125rem",
-                fontFamily: "Inter",
+                // fontFamily: "Inter",
                 color: "#40201E",
                 lineHeight: 1.75,
                 mb: 4,
