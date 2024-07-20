@@ -1,74 +1,162 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
-import phone from "../../assets/Phone.svg"
-import notif from "../../assets/Notif.svg"
+import { Link as RouterLink, LinkProps } from "react-router-dom";
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  Typography,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
+import { styled } from "@mui/system";
 
-const JoinButton = styled(Link)`
-  background-color: #bf0a0a;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #ffffff;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 25px;
-  font-size: 14px;
-  cursor: pointer;
-  text-decoration: none;
-  width: 200px;
-  height: 60px;
-  margin-top: 0;
-  margin-left: 20%;
-  &:hover {
-    background-color: #a00a0a;
+// Import your assets
+import phoneImage from "../../assets/Phone.svg";
+import notifImage from "../../assets/Notif.svg";
+import Diamond from "../../assets/Diamond.svg";
+import PhoneLine from "../../assets/PhoneLine.svg";
+import Vector from "../../assets/Vector.svg";
 
-  }
-`;
+// Create a custom type for the styled button
+type StyledButtonProps = {
+  to: string;
+} & React.ComponentProps<typeof Button>;
 
-const Hero = () => {
+const StyledButton = styled(Button)<StyledButtonProps>(({ theme }) => ({
+  borderRadius: 25,
+  padding: theme.spacing(1.5, 3),
+  fontSize: 16,
+  textTransform: "none",
+}));
+
+const Hero: React.FC = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
   return (
-    <section
-      style={{ height: "600px", backgroundColor: "#fbf5f1", width: "100%" }}
-    >
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "row"
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            width: "50%",
+    <Box sx={{ backgroundColor: "#fbf5f1", py: { xs: 6, md: 12 } }}>
+      <Container maxWidth="lg">
+        <Grid container spacing={4} alignItems="flex-start">
+          <Grid item xs={12} md={6}>
+            <Typography
+              variant="h1"
+              sx={{
+                fontSize: { xs: "2.5rem", md: "3.5rem" },
+                fontWeight: 700,
+                fontFamily: "Poppins",
+                lineHeight: 1.2,
+                mb: 2,
+              }}
+            >
+              Stay Ahead of the Competition
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                fontSize: "1.125rem",
+                fontFamily: "Inter",
+                color: "#40201E",
+                lineHeight: 1.75,
+                mb: 4,
+              }}
+            >
+              Get notified with real-time notifications of the latest internship
+              opportunities, ensuring you never miss a chance to advance your
+              career.
+            </Typography>
+            <StyledButton
+              to="/pricing"
+              variant="contained"
+              color="error"
+              size="large"
+              LinkComponent={RouterLink}
+            >
+              Start 14 Day Trial
+            </StyledButton>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Box
+              sx={{
+                position: "relative",
+                textAlign: window.innerWidth < 900 ? "center" : "right",
+              }}
+            >
+              <Box
+                sx={{
+                  position: "relative",
+                  display: "inline-block",
+                  mt: window.innerWidth < 900 ? 5 : 0,
+                }}
+              >
+                <Box
+                  component="img"
+                  src={phoneImage}
+                  alt="Phone"
+                  sx={{
+                    width: "100%",
+                    maxWidth: 300,
+                    height: "auto",
+                    mb: { xs: 2, md: 0 },
+                  }}
+                />
+                <Box
+                  component="img"
+                  src={notifImage}
+                  alt="Notification"
+                  sx={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    width: "80%",
+                    maxWidth: 230,
+                    height: "auto",
+                  }}
+                />
+                <Box
+                  component="img"
+                  src={PhoneLine}
+                  alt="Phone Line"
+                  sx={{
+                    position: "absolute",
+                    top: "-40px",
+                    left: "-30px",
+                    width: "50px",
+                    height: "auto",
+                  }}
+                />
 
-            
-          }}
-        >
-          <h1 style={{ fontSize: "50px", fontWeight: "bold", fontFamily: 'Poppins', lineHeight: 1.5, marginLeft: "20%" }}>
-            Stay Ahead of the Competition
-          </h1>
-          <div style = {{width: "80%"}}>
-          <p style={{ fontSize: "18px", fontFamily: 'Inter', color : '#40201E', lineHeight: 1.75, marginTop: "-6%", marginLeft: "25%"}}>
-            Get notified with real-time notifications of the latest internship
-            opportunities, ensuring you never miss a chance to advance your
-            career.
-          </p>
-          </div>
-          <JoinButton to="/pricing" style = {{fontFamily: 'Poppins'}}>Start 14 Day Trial</JoinButton>
-        </div>
-        <div style={{ width: "50%" }}>
-      <img src = {phone} alt="Phone" style={{ width: "300px", height: "auto", marginLeft: 200}} />
-      <img src={notif} alt="Notification" style = {{width: "230px", height: "auto", marginLeft: 200}} />
-      </div>
-      </div>
-     
-    </section>
+                <Box
+                  component="img"
+                  src={Vector}
+                  alt="Vector"
+                  sx={{
+                    position: "absolute",
+                    top: "30%",
+                    left: "-50%",
+                    width: "50px",
+                    height: "auto",
+                  }}
+                />
+                <Box
+                  component="img"
+                  src={Diamond}
+                  alt="Diamond"
+                  sx={{
+                    position: "absolute",
+                    top: "50%",
+                    right: "-50%",
+                    width: "50px",
+                    height: "auto",
+                  }}
+                />
+              </Box>
+            </Box>
+          </Grid>
+        </Grid>
+      </Container>
+    </Box>
   );
 };
 
