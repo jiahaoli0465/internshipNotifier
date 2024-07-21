@@ -20,6 +20,7 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        working-directory: ./workflow
 
       - name: Run scrape and insert script
         run: node workflow/update_positions.js
