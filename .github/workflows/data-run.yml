@@ -3,6 +3,7 @@ name: Scrape and Insert Data
 on:
   schedule:
     - cron: "0 * * * *" # Every hour
+  workflow_dispatch: # Add this line to enable manual triggering
 
 jobs:
   scrape-and-insert-data:
