@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "@supabase/supabase-js": "^2.44.4",
+    "axios": "^1.7.2",
+    "cheerio": "^1.0.0-rc.12",
+    "html-escaper": "^3.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.11"
+  }
+}
