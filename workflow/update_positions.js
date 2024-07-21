@@ -3,8 +3,12 @@ const { unescape } = require("html-escaper");
 const cheerio = require("cheerio");
 const { createClient } = require("@supabase/supabase-js");
 
-const supabaseUrl = process.env.VITE_SUPA_URL;
-const supabaseKey = process.env.VITE_SUPA_KEY;
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error("Supabase URL and key are required.");
+}
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
@@ -99,11 +103,27 @@ const fetchPostings = async () => {
       });
     }
 
+    // Reverse postings to ensure latest are at the end
+    postings.reverse();
+
     return postings;
   } catch (error) {
     console.error(`Failed to retrieve the page: ${error}`);
     return [];
   }
+};
+
+const getExistingPostings = async () => {
+  const { data, error } = await supabase
+    .from("positions")
+    .select("company, role, location, link, date_posted");
+
+  if (error) {
+    console.error("Error fetching existing data:", error);
+    return [];
+  }
+
+  return data;
 };
 
 const insertData = async (postings) => {
@@ -117,9 +137,35 @@ const insertData = async (postings) => {
 };
 
 const run = async () => {
+  console.log("Fetching postings...");
   const postings = await fetchPostings();
+  console.log("Postings fetched:", postings.length);
+
   if (postings.length > 0) {
-    await insertData(postings);
+    console.log("Fetching existing postings...");
+    const existingPostings = await getExistingPostings();
+    console.log("Existing postings fetched:", existingPostings.length);
+
+    // Filter out postings that already exist in the table
+    const newPostings = postings.filter((posting) => {
+      return !existingPostings.some(
+        (existing) =>
+          existing.company === posting.company &&
+          existing.role === posting.role &&
+          existing.location === posting.location &&
+          existing.link === posting.link &&
+          existing.date_posted === posting.date_posted
+      );
+    });
+
+    console.log("New postings to insert:", newPostings.length);
+    if (newPostings.length > 0) {
+      console.log("Inserting new data...");
+      await insertData(newPostings);
+      console.log("Data inserted");
+    } else {
+      console.log("No new data to insert");
+    }
   } else {
     console.log("No data to insert");
   }
