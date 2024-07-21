@@ -3,8 +3,8 @@ const { unescape } = require("html-escaper");
 const cheerio = require("cheerio");
 const { createClient } = require("@supabase/supabase-js");
 
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_KEY;
+const supabaseUrl = process.env.VITE_SUPA_URL;
+const supabaseKey = process.env.VITE_SUPA_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
   throw new Error("Supabase URL and key are required.");
