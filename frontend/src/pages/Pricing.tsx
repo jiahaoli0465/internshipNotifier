@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Box,
   Button,
@@ -11,12 +11,12 @@ import {
   ListItem,
   ListItemText,
   Paper,
-} from "@mui/material";
-import { BackgroundGradient } from "../components/aceternity/BackgroundGradient";
+} from '@mui/material';
+import { BackgroundGradient } from '../components/aceternity/BackgroundGradient';
 
 interface PricingOption {
   title: string;
-  price: string;
+  price: React.ReactNode;
   description: string;
   features: string[];
   buttonText: string;
@@ -25,59 +25,66 @@ interface PricingOption {
 
 const pricingOptions: PricingOption[] = [
   {
-    title: "Basic",
-    price: "$4.99/week",
-    description: "Perfect for students starting their internship search",
+    title: 'Basic',
+    price: (
+      <>
+        Free{' '}
+        <del style={{ textDecorationThickness: '1px', color: 'gray' }}>
+          $4.99/week
+        </del>
+      </>
+    ),
+    description: 'Perfect for students starting their internship search',
     features: [
-      "Daily email notifications",
-      "Full Access to all internship listings",
+      'Daily email notifications',
+      'Full Access to all internship listings',
     ],
-    buttonText: "Choose Basic",
+    buttonText: 'Choose Basic',
   },
   {
-    title: "Pro",
-    price: "$19.99/month",
-    description: "Ideal for serious applicants aiming for top-tier internships",
+    title: 'Pro',
+    price: '$19.99/month',
+    description: 'Ideal for serious applicants aiming for top-tier internships',
     features: [
-      "Instant text & email notifications",
-      "Full Access to all internship listings",
+      'Instant text & email notifications',
+      'Full Access to all internship listings',
 
-      "Resume review and optimization (10/month)",
+      'Resume review and optimization (10/month)',
     ],
-    buttonText: "Coming Soon",
+    buttonText: 'Coming Soon',
     disabled: true,
   },
-  {
-    title: "Premium Lite",
-    price: "$49.99",
-    description: "One-time payment for a lifetime of internship opportunities",
-    features: [
-      "Instant text & email notifications",
-      "Full Access to all internship listings",
-    ],
-    buttonText: "Choose Premium Lite",
-  },
-  {
-    title: "Premium Pro",
-    price: "69.99",
-    description:
-      "One-time payment for serious applicants aiming for top-tier internships",
-    features: [
-      "Instant text & email notifications",
-      "Full Access to all internship listings",
+  // {
+  //   title: "Premium Lite",
+  //   price: "$49.99",
+  //   description: "One-time payment for a lifetime of internship opportunities",
+  //   features: [
+  //     "Instant text & email notifications",
+  //     "Full Access to all internship listings",
+  //   ],
+  //   buttonText: "Choose Premium Lite",
+  // },
+  // {
+  //   title: "Premium Pro",
+  //   price: "69.99",
+  //   description:
+  //     "One-time payment for serious applicants aiming for top-tier internships",
+  //   features: [
+  //     "Instant text & email notifications",
+  //     "Full Access to all internship listings",
 
-      "Resume review and optimization (10/month)",
-    ],
-    buttonText: "Coming Soon",
-    disabled: true,
-  },
+  //     "Resume review and optimization (10/month)",
+  //   ],
+  //   buttonText: "Coming Soon",
+  //   disabled: true,
+  // },
 ];
 
 const Pricing: React.FC = () => {
   const theme = useTheme();
 
   return (
-    <Container maxWidth="md" sx={{ py: 4 }}>
+    <Container maxWidth="lg" sx={{ py: 4 }}>
       <Box textAlign="center" mb={4}>
         <Typography variant="h2" gutterBottom>
           Find Your Perfect Plan
@@ -89,20 +96,20 @@ const Pricing: React.FC = () => {
       <Grid container spacing={4} width="100%">
         {pricingOptions.map((option) => (
           <Grid item key={option.title} xs={12} sm={6}>
-            {option.title.includes("Pro") ? (
+            {option.title.includes('Pro') ? (
               <BackgroundGradient animate={true}>
                 <Paper
                   elevation={3}
                   sx={{
-                    borderRadius: "22px",
+                    borderRadius: '22px',
                     p: 3,
-                    textAlign: "center",
-                    height: "536px",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                    "&:hover": {
-                      boxShadow: "0 8px 16px 0 rgba(0,0,0,0.1)",
+                    textAlign: 'center',
+                    height: '536px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    '&:hover': {
+                      boxShadow: '0 8px 16px 0 rgba(0,0,0,0.1)',
                     },
                   }}
                 >
@@ -130,7 +137,7 @@ const Pricing: React.FC = () => {
                     </List>
                   </Box>
                   <Button
-                    variant={option.title === "Pro" ? "contained" : "outlined"}
+                    variant={option.title === 'Pro' ? 'contained' : 'outlined'}
                     color="primary"
                     size="large"
                     sx={{ mt: 3 }}
@@ -144,15 +151,15 @@ const Pricing: React.FC = () => {
               <Paper
                 elevation={3}
                 sx={{
-                  borderRadius: "22px",
+                  borderRadius: '22px',
                   p: 3,
-                  textAlign: "center",
-                  height: "540px",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                  "&:hover": {
-                    boxShadow: "0 8px 16px 0 rgba(0,0,0,0.1)",
+                  textAlign: 'center',
+                  height: '540px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  '&:hover': {
+                    boxShadow: '0 8px 16px 0 rgba(0,0,0,0.1)',
                   },
                 }}
               >
@@ -180,7 +187,7 @@ const Pricing: React.FC = () => {
                   </List>
                 </Box>
                 <Button
-                  variant={option.title === "Pro" ? "contained" : "outlined"}
+                  variant={option.title === 'Pro' ? 'contained' : 'outlined'}
                   color="primary"
                   size="large"
                   sx={{ mt: 3 }}

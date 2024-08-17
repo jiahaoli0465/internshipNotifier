@@ -1,40 +1,51 @@
-const axios = require("axios");
-const { unescape } = require("html-escaper");
-const cheerio = require("cheerio");
-const { createClient } = require("@supabase/supabase-js");
+const axios = require('axios');
+const { unescape } = require('html-escaper');
+const cheerio = require('cheerio');
+const { createClient } = require('@supabase/supabase-js');
+const twilio = require('twilio');
+const sgMail = require('@sendgrid/mail');
 
+// Supabase setup
 const supabaseUrl = process.env.VITE_SUPA_URL;
 const supabaseKey = process.env.VITE_SUPA_KEY;
-
-if (!supabaseUrl || !supabaseKey) {
-  throw new Error("Supabase URL and key are required.");
-}
-
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+// Twilio setup
+const twilioClient = twilio(
+  process.env.TWILIO_ACCOUNT_SID,
+  process.env.TWILIO_AUTH_TOKEN
+);
+
+// SendGrid setup
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error('Supabase URL and key are required.');
+}
+
 const URL =
-  "https://raw.githubusercontent.com/SimplifyJobs/Summer2025-Internships/dev/README.md";
+  'https://raw.githubusercontent.com/SimplifyJobs/Summer2025-Internships/dev/README.md';
 
 const cleanCompanyName = (companyName, lastCompany) => {
-  if (companyName.trim() === "") {
+  if (companyName.trim() === '') {
     return lastCompany;
   }
-  const cleanName = companyName.replace(/\*\*\[(.*?)\]\(.*?\)\*\*/, "$1");
+  const cleanName = companyName.replace(/\*\*\[(.*?)\]\(.*?\)\*\*/, '$1');
   return cleanName;
 };
 
 const cleanText = (text) => {
   text = unescape(text);
-  text = text.normalize("NFKC");
+  text = text.normalize('NFKC');
   text = text
-    .replace(/<\/?br\/?>/g, ", ")
-    .replace(/<[^>]*>/g, "")
+    .replace(/<\/?br\/?>/g, ', ')
+    .replace(/<[^>]*>/g, '')
     .trim();
   return text;
 };
 
 const cleanUrl = (url) => {
-  const paramString = "utm_source=Simplify&ref=Simplify";
+  const paramString = 'utm_source=Simplify&ref=Simplify';
   const paramIndex = url.indexOf(paramString);
 
   if (paramIndex !== -1) {
@@ -50,47 +61,47 @@ const fetchPostings = async () => {
     const content = response.data;
 
     const tableStart = content.indexOf(
-      "| Company | Role | Location | Application/Link | Date Posted |"
+      '| Company | Role | Location | Application/Link | Date Posted |'
     );
     const tableEnd = content.indexOf(
-      "<!-- Please leave a one line gap between this and the table TABLE_END (DO NOT CHANGE THIS LINE) -->",
+      '<!-- Please leave a one line gap between this and the table TABLE_END (DO NOT CHANGE THIS LINE) -->',
       tableStart
     );
 
     if (tableStart === -1 || tableEnd === -1) {
-      console.log("Table not found in the content");
+      console.log('Table not found in the content');
       return [];
     }
 
-    const tableContent = content.slice(tableStart, tableEnd).trim().split("\n");
+    const tableContent = content.slice(tableStart, tableEnd).trim().split('\n');
     const tableRows = tableContent.slice(2);
 
     const postings = [];
-    let lastCompany = "Unknown Company";
+    let lastCompany = 'Unknown Company';
 
     for (const row of tableRows) {
-      if (row.trim() === "") {
+      if (row.trim() === '') {
         continue;
       }
 
-      const cols = row.split("|").slice(1, -1);
+      const cols = row.split('|').slice(1, -1);
 
       if (cols.length < 5) {
         continue;
       }
 
       let company = cleanCompanyName(
-        cols[0].trim().replace("\u21b3", ""),
+        cols[0].trim().replace('\u21b3', ''),
         lastCompany
       );
-      let role = cleanText(cols[1].trim()).replace("🛂", "").trim();
-      const location = cleanText(cols[2].replace("</br>", ", ").trim());
+      let role = cleanText(cols[1].trim()).replace('🛂', '').trim();
+      const location = cleanText(cols[2].replace('</br>', ', ').trim());
       const $ = cheerio.load(cols[3].trim());
-      const rawLink = $("a").attr("href") || "N/A";
+      const rawLink = $('a').attr('href') || 'N/A';
       const link = cleanUrl(rawLink);
       const datePosted = cols[4].trim();
 
-      if (company !== "") {
+      if (company !== '') {
         lastCompany = company;
       }
 
@@ -115,11 +126,11 @@ const fetchPostings = async () => {
 
 const getExistingPostings = async () => {
   const { data, error } = await supabase
-    .from("positions")
-    .select("company, role, location, link, date_posted");
+    .from('positions')
+    .select('company, role, location, link, date_posted');
 
   if (error) {
-    console.error("Error fetching existing data:", error);
+    console.error('Error fetching existing data:', error);
     return [];
   }
 
@@ -127,26 +138,107 @@ const getExistingPostings = async () => {
 };
 
 const insertData = async (postings) => {
-  const { data, error } = await supabase.from("positions").insert(postings);
+  const { data, error } = await supabase.from('positions').insert(postings);
 
   if (error) {
-    console.error("Error inserting data:", error);
+    console.error('Error inserting data:', error);
   } else {
-    console.log("Data inserted:", data);
+    console.log('Data inserted:', data);
+  }
+};
+
+const getSubscribedUsers = async () => {
+  const { data, error } = await supabase
+    .from('subscriptions')
+    .select('email, phone_number');
+
+  if (error) {
+    console.error('Error fetching subscribed users:', error);
+    return [];
+  }
+
+  return data;
+};
+
+const formatJobPostings = (postings) => {
+  return postings
+    .map(
+      (posting) =>
+        `${posting.company} - ${posting.role}\nLocation: ${posting.location}\nApply: ${posting.link}\n`
+    )
+    .join('\n');
+};
+
+const sendSMS = async (phoneNumber, message) => {
+  try {
+    await twilioClient.messages.create({
+      body: message,
+      from: process.env.TWILIO_PHONE_NUMBER,
+      to: phoneNumber,
+    });
+    console.log(`SMS sent to ${phoneNumber}`);
+  } catch (error) {
+    console.error(`Error sending SMS to ${phoneNumber}:`, error);
+  }
+};
+
+const sendEmail = async (email, subject, htmlContent) => {
+  const msg = {
+    to: email,
+    from: 'your-verified-sender@example.com', // Change to your verified sender
+    subject: subject,
+    html: htmlContent,
+  };
+
+  try {
+    await sgMail.send(msg);
+    console.log(`Email sent to ${email}`);
+  } catch (error) {
+    console.error(`Error sending email to ${email}:`, error);
+  }
+};
+
+const notifyUsers = async (newPostings) => {
+  const users = await getSubscribedUsers();
+  const formattedPostings = formatJobPostings(newPostings);
+
+  for (const user of users) {
+    if (user.phone_number) {
+      const smsMessage = `New internship opportunities:\n\n${formattedPostings}\n\nReply STOP to unsubscribe.`;
+      await sendSMS(user.phone_number, smsMessage);
+    }
+
+    if (user.email) {
+      const emailSubject = 'New Internship Opportunities';
+      const emailHtml = `
+        <h1>New Internship Opportunities</h1>
+        ${newPostings
+          .map(
+            (posting) => `
+          <h2>${posting.company} - ${posting.role}</h2>
+          <p><strong>Location:</strong> ${posting.location}</p>
+          <p><strong>Posted:</strong> ${posting.date_posted}</p>
+          <p><a href="${posting.link}">Apply Now</a></p>
+        `
+          )
+          .join('<hr>')}
+        <p>To unsubscribe, click <a href="[Unsubscribe_Link]">here</a>.</p>
+      `;
+      await sendEmail(user.email, emailSubject, emailHtml);
+    }
   }
 };
 
 const run = async () => {
-  console.log("Fetching postings...");
+  console.log('Fetching postings...');
   const postings = await fetchPostings();
-  console.log("Postings fetched:", postings.length);
+  console.log('Postings fetched:', postings.length);
 
   if (postings.length > 0) {
-    console.log("Fetching existing postings...");
+    console.log('Fetching existing postings...');
     const existingPostings = await getExistingPostings();
-    console.log("Existing postings fetched:", existingPostings.length);
+    console.log('Existing postings fetched:', existingPostings.length);
 
-    // Filter out postings that already exist in the table
     const newPostings = postings.filter((posting) => {
       return !existingPostings.some(
         (existing) =>
@@ -158,16 +250,20 @@ const run = async () => {
       );
     });
 
-    console.log("New postings to insert:", newPostings.length);
+    console.log('New postings to insert:', newPostings.length);
     if (newPostings.length > 0) {
-      console.log("Inserting new data...");
+      console.log('Inserting new data...');
       await insertData(newPostings);
-      console.log("Data inserted");
+      console.log('Data inserted');
+
+      console.log('Notifying subscribed users...');
+      await notifyUsers(newPostings);
+      console.log('Users notified');
     } else {
-      console.log("No new data to insert");
+      console.log('No new data to insert');
     }
   } else {
-    console.log("No data to insert");
+    console.log('No data to insert');
   }
 };
 

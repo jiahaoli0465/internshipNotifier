@@ -5,16 +5,19 @@ const theme = createTheme({
     primary: {
       main: '#bf0a0a',
     },
+    secondary: {
+      main: '#A37B73',
+    },
   },
   components: {
     MuiButton: {
-    //   styleOverrides: {
-    //     root: {
-    //       '&:hover': {
-    //         backgroundColor: '#a00a0a',
-    //       },
-    //     },
-    //   },
+      //   styleOverrides: {
+      //     root: {
+      //       '&:hover': {
+      //         backgroundColor: '#a00a0a',
+      //       },
+      //     },
+      //   },
     },
   },
 });
