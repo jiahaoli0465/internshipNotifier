@@ -8,6 +8,8 @@ import {
   Link,
   Divider,
 } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
+
 // import GoogleIcon from '@mui/icons-material/Google';
 import supabase from '../config/supabaseClient';
 import { useNavigate } from 'react-router-dom';
@@ -113,7 +115,7 @@ const LoginPage: React.FC = () => {
             Sign in with Google
           </Button> */}
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Link href="/signup" variant="body2">
+            <Link component={RouterLink} to="/signup" variant="body2">
               {"Don't have an account? Sign Up"}
             </Link>
             {/* <Link href="/forgot-password" variant="body2">

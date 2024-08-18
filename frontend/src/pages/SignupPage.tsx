@@ -10,6 +10,8 @@ import {
   Snackbar,
   Alert,
 } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
+
 // import GoogleIcon from '@mui/icons-material/Google';
 import supabase from '../config/supabaseClient';
 import { useAuth } from '../hooks/useAuth';
@@ -154,7 +156,7 @@ const SignupPage: React.FC = () => {
           >
             Sign up with Google
           </Button> */}
-          <Link href="/login" variant="body2">
+          <Link component={RouterLink} to="/login" variant="body2">
             {'Already have an account? Sign In'}
           </Link>
         </Box>
