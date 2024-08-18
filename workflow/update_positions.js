@@ -239,6 +239,7 @@ const run = async () => {
     }
   } else {
     console.log('No data to insert');
+    await notifyUsers([]);
   }
 };
 
