@@ -22,6 +22,7 @@ import supabase from '../config/supabaseClient';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import EmailIcon from '@mui/icons-material/Email';
 import PhoneIcon from '@mui/icons-material/Phone';
+import useSendText from '../hooks/useSendText';
 
 const SubscriptionPage: React.FC = () => {
   const { session, userId, loading: authLoading } = useAuth();
@@ -35,6 +36,7 @@ const SubscriptionPage: React.FC = () => {
     'info'
   );
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const { sendText } = useSendText();
 
   useEffect(() => {
     if (!authLoading) {
@@ -99,6 +101,8 @@ const SubscriptionPage: React.FC = () => {
           ? 'Subscription updated successfully!'
           : 'Subscribed successfully!'
       );
+      sendText(phoneNumber, 'You have successfully subscribed to Internly! 🎉');
+
       setSeverity('success');
       setIsSubscribed(true);
     }
@@ -132,8 +136,10 @@ const SubscriptionPage: React.FC = () => {
   }
 
   const subscriptionBenefits = [
-    'Early access to new internship listings',
-    'Instant notifications on new job postings',
+    'Daily text alerts on new internships',
+    'Email notifications currently disabled',
+    // 'Early access to new internship listings',
+    // 'Instant notifications on new job postings',
     // 'Personalized job recommendations',
     // 'Monthly newsletter with career tips',
     // 'Exclusive webinars with industry experts',

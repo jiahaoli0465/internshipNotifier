@@ -47,12 +47,13 @@ const SignupPage: React.FC = () => {
       setError(signUpError.message);
     } else {
       setSuccess(
-        'Sign up successful! Please check your email for verification.'
+        'Sign up successful! Please check your email for verification and login.'
       );
       // Clear the form
       setEmail('');
       setPassword('');
       setConfirmPassword('');
+      navigate('/login');
     }
   };
 

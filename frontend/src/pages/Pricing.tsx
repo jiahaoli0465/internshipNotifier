@@ -13,6 +13,7 @@ import {
   Paper,
 } from '@mui/material';
 import { BackgroundGradient } from '../components/aceternity/BackgroundGradient';
+import { useNavigate } from 'react-router-dom';
 
 interface PricingOption {
   title: string;
@@ -21,6 +22,7 @@ interface PricingOption {
   features: string[];
   buttonText: string;
   disabled?: boolean;
+  ref: string;
 }
 
 const pricingOptions: PricingOption[] = [
@@ -36,10 +38,11 @@ const pricingOptions: PricingOption[] = [
     ),
     description: 'Perfect for students starting their internship search',
     features: [
-      'Daily email notifications',
+      'Daily text notifications',
       'Full Access to all internship listings',
     ],
     buttonText: 'Choose Basic',
+    ref: '/subscription',
   },
   {
     title: 'Pro',
@@ -53,6 +56,7 @@ const pricingOptions: PricingOption[] = [
     ],
     buttonText: 'Coming Soon',
     disabled: true,
+    ref: '/subscription',
   },
   // {
   //   title: "Premium Lite",
@@ -82,6 +86,7 @@ const pricingOptions: PricingOption[] = [
 
 const Pricing: React.FC = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -192,6 +197,7 @@ const Pricing: React.FC = () => {
                   size="large"
                   sx={{ mt: 3 }}
                   disabled={option.disabled}
+                  onClick={() => navigate(option.ref)}
                 >
                   {option.buttonText}
                 </Button>

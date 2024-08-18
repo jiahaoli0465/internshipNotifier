@@ -2,22 +2,14 @@ const axios = require('axios');
 const { unescape } = require('html-escaper');
 const cheerio = require('cheerio');
 const { createClient } = require('@supabase/supabase-js');
-const twilio = require('twilio');
-const sgMail = require('@sendgrid/mail');
 
 // Supabase setup
 const supabaseUrl = process.env.VITE_SUPA_URL;
 const supabaseKey = process.env.VITE_SUPA_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// Twilio setup
-const twilioClient = twilio(
-  process.env.TWILIO_ACCOUNT_SID,
-  process.env.TWILIO_AUTH_TOKEN
-);
-
-// SendGrid setup
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+// TextBelt setup
+const textbeltKey = process.env.VITE_TEXTBELT_API_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
   throw new Error('Supabase URL and key are required.');
@@ -150,7 +142,7 @@ const insertData = async (postings) => {
 const getSubscribedUsers = async () => {
   const { data, error } = await supabase
     .from('subscriptions')
-    .select('email, phone_number');
+    .select('phone_number');
 
   if (error) {
     console.error('Error fetching subscribed users:', error);
@@ -164,37 +156,34 @@ const formatJobPostings = (postings) => {
   return postings
     .map(
       (posting) =>
-        `${posting.company} - ${posting.role}\nLocation: ${posting.location}\nApply: ${posting.link}\n`
+        `${posting.company} - ${posting.role}\nLocation: ${posting.location}\nApply: ${posting.link}\nPosted: ${posting.date_posted}\n`
     )
     .join('\n');
 };
 
 const sendSMS = async (phoneNumber, message) => {
   try {
-    await twilioClient.messages.create({
-      body: message,
-      from: process.env.TWILIO_PHONE_NUMBER,
-      to: phoneNumber,
-    });
-    console.log(`SMS sent to ${phoneNumber}`);
-  } catch (error) {
-    console.error(`Error sending SMS to ${phoneNumber}:`, error);
-  }
-};
+    const response = await axios.post(
+      'https://textbelt.com/text',
+      {
+        phone: phoneNumber,
+        message: message,
+        key: textbeltKey,
+      },
+      {
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
 
-const sendEmail = async (email, subject, htmlContent) => {
-  const msg = {
-    to: email,
-    from: 'your-verified-sender@example.com', // Change to your verified sender
-    subject: subject,
-    html: htmlContent,
-  };
-
-  try {
-    await sgMail.send(msg);
-    console.log(`Email sent to ${email}`);
+    if (response.data.success) {
+      console.log(`SMS sent to ${phoneNumber}`);
+    } else {
+      console.error(
+        `Failed to send SMS to ${phoneNumber}: ${response.data.error}`
+      );
+    }
   } catch (error) {
-    console.error(`Error sending email to ${email}:`, error);
+    console.error(`Error sending SMS to ${phoneNumber}:`, error.message);
   }
 };
 
@@ -206,25 +195,6 @@ const notifyUsers = async (newPostings) => {
     if (user.phone_number) {
       const smsMessage = `New internship opportunities:\n\n${formattedPostings}\n\nReply STOP to unsubscribe.`;
       await sendSMS(user.phone_number, smsMessage);
-    }
-
-    if (user.email) {
-      const emailSubject = 'New Internship Opportunities';
-      const emailHtml = `
-        <h1>New Internship Opportunities</h1>
-        ${newPostings
-          .map(
-            (posting) => `
-          <h2>${posting.company} - ${posting.role}</h2>
-          <p><strong>Location:</strong> ${posting.location}</p>
-          <p><strong>Posted:</strong> ${posting.date_posted}</p>
-          <p><a href="${posting.link}">Apply Now</a></p>
-        `
-          )
-          .join('<hr>')}
-        <p>To unsubscribe, click <a href="[Unsubscribe_Link]">here</a>.</p>
-      `;
-      await sendEmail(user.email, emailSubject, emailHtml);
     }
   }
 };

@@ -1,8 +1,8 @@
 name: Scrape and Insert Data
 
 on:
-  # schedule:
-  #   - cron: "0 * * * *" # Every hour
+  schedule:
+    - cron: '0 10 * * *' # Run at 10:00 AM UTC every day
   workflow_dispatch: # Add this line to enable manual triggering
 
 jobs:
@@ -27,3 +27,4 @@ jobs:
         env:
           VITE_SUPA_URL: ${{ secrets.VITE_SUPA_URL }}
           VITE_SUPA_KEY: ${{ secrets.VITE_SUPA_KEY }}
+          VITE_TEXTBELT_API_KEY: ${{ secrets.VITE_TEXTBELT_API_KEY }}
