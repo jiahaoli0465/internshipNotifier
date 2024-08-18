@@ -147,12 +147,17 @@ const getSubscribedUsers = async () => {
   if (error) {
     console.error('Error fetching subscribed users:', error);
     return [];
+  } else {
+    console.log('Subscribed users fetched:', data);
   }
 
   return data;
 };
 
 const formatJobPostings = (postings) => {
+  if (postings.length === 0) {
+    return 'No new internship opportunities found today.';
+  }
   return postings
     .map(
       (posting) =>
@@ -190,13 +195,13 @@ const sendSMS = async (phoneNumber, message) => {
 const notifyUsers = async (newPostings) => {
   const users = await getSubscribedUsers();
   const formattedPostings = formatJobPostings(newPostings);
-
-  for (const user of users) {
-    if (user.phone_number) {
-      const smsMessage = `New internship opportunities:\n\n${formattedPostings}\n\nReply STOP to unsubscribe.`;
-      await sendSMS(user.phone_number, smsMessage);
+  if (formattedPostings)
+    for (const user of users) {
+      if (user.phone_number) {
+        const smsMessage = `New internship opportunities:\n\n${formattedPostings}\n\nReply STOP to unsubscribe.`;
+        await sendSMS(user.phone_number, smsMessage);
+      }
     }
-  }
 };
 
 const run = async () => {
