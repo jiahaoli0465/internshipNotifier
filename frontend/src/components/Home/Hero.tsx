@@ -1,14 +1,6 @@
 import React from 'react';
-import { Link as RouterLink, LinkProps } from 'react-router-dom';
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  Typography,
-  useTheme,
-  useMediaQuery,
-} from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
+import { Box, Button, Container, Grid, Typography } from '@mui/material';
 import { styled } from '@mui/system';
 
 // Import your assets
@@ -31,9 +23,6 @@ const StyledButton = styled(Button)<StyledButtonProps>(({ theme }) => ({
 }));
 
 const Hero: React.FC = () => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-
   return (
     <Box sx={{ backgroundColor: '#fbf5f1', py: { xs: 6, md: 12 } }}>
       <Container maxWidth="lg">

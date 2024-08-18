@@ -21,7 +21,6 @@ import {
   ListItem,
   ListItemText,
   useMediaQuery,
-  Theme,
 } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';

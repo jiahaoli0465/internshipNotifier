@@ -5,7 +5,6 @@ import {
   Container,
   Grid,
   Typography,
-  useTheme,
   Divider,
   List,
   ListItem,
@@ -85,7 +84,6 @@ const pricingOptions: PricingOption[] = [
 ];
 
 const Pricing: React.FC = () => {
-  const theme = useTheme();
   const navigate = useNavigate();
 
   return (

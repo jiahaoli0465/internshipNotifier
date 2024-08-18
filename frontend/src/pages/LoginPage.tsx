@@ -8,7 +8,7 @@ import {
   Link,
   Divider,
 } from '@mui/material';
-import GoogleIcon from '@mui/icons-material/Google';
+// import GoogleIcon from '@mui/icons-material/Google';
 import supabase from '../config/supabaseClient';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
@@ -40,17 +40,17 @@ const LoginPage: React.FC = () => {
     }
   };
 
-  const handleGoogleSignIn = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
-    if (error) {
-      alert('Error signing in with Google: ' + error.message);
-    }
-  };
+  // const handleGoogleSignIn = async () => {
+  //   const { error } = await supabase.auth.signInWithOAuth({
+  //     provider: 'google',
+  //     options: {
+  //       redirectTo: `${window.location.origin}/auth/callback`,
+  //     },
+  //   });
+  //   if (error) {
+  //     alert('Error signing in with Google: ' + error.message);
+  //   }
+  // };
 
   return (
     <Container maxWidth="xs" sx={{ height: '70vh' }}>

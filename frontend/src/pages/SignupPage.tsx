@@ -6,11 +6,11 @@ import {
   Typography,
   Box,
   Link,
-  Divider,
+  //   Divider,
   Snackbar,
   Alert,
 } from '@mui/material';
-import GoogleIcon from '@mui/icons-material/Google';
+// import GoogleIcon from '@mui/icons-material/Google';
 import supabase from '../config/supabaseClient';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
@@ -57,17 +57,17 @@ const SignupPage: React.FC = () => {
     }
   };
 
-  const handleGoogleSignIn = async () => {
-    const { error: signInError } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
-    if (signInError) {
-      setError('Error signing in with Google: ' + signInError.message);
-    }
-  };
+  //   const handleGoogleSignIn = async () => {
+  //     const { error: signInError } = await supabase.auth.signInWithOAuth({
+  //       provider: 'google',
+  //       options: {
+  //         redirectTo: `${window.location.origin}/auth/callback`,
+  //       },
+  //     });
+  //     if (signInError) {
+  //       setError('Error signing in with Google: ' + signInError.message);
+  //     }
+  //   };
 
   const handleCloseMessage = (
     event?: React.SyntheticEvent | Event,
@@ -76,6 +76,7 @@ const SignupPage: React.FC = () => {
     if (reason === 'clickaway') {
       return;
     }
+    event?.preventDefault();
     setError(null);
     setSuccess(null);
   };

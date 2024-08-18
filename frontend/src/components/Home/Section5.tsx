@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Container,
   Typography,
@@ -11,16 +11,16 @@ import {
   Link,
   Snackbar,
   Alert,
-} from "@mui/material";
-import { useTheme } from "@mui/material/styles";
-import EmailIcon from "@mui/icons-material/Email";
-import PhoneIcon from "@mui/icons-material/Phone";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import TwitterIcon from "@mui/icons-material/Twitter";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import HelpIcon from "@mui/icons-material/Help";
-import BookIcon from "@mui/icons-material/Book";
-import ArticleIcon from "@mui/icons-material/Article";
+} from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import EmailIcon from '@mui/icons-material/Email';
+// import PhoneIcon from "@mui/icons-material/Phone";
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import TwitterIcon from '@mui/icons-material/Twitter';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import HelpIcon from '@mui/icons-material/Help';
+import BookIcon from '@mui/icons-material/Book';
+import ArticleIcon from '@mui/icons-material/Article';
 
 export const Section5: React.FC = () => {
   const theme = useTheme();
@@ -34,7 +34,8 @@ export const Section5: React.FC = () => {
     event?: React.SyntheticEvent | Event,
     reason?: string
   ) => {
-    if (reason === "clickaway") {
+    event?.preventDefault();
+    if (reason === 'clickaway') {
       return;
     }
     setSnackbarOpen(false);
@@ -43,7 +44,7 @@ export const Section5: React.FC = () => {
   return (
     <Box
       sx={{
-        padding: "60px 20px",
+        padding: '60px 20px',
       }}
     >
       <Container maxWidth="lg">
@@ -53,9 +54,9 @@ export const Section5: React.FC = () => {
           gutterBottom
           sx={{
             color: theme.palette.text.primary,
-            fontWeight: "bold",
-            textAlign: "center",
-            marginBottom: "40px",
+            fontWeight: 'bold',
+            textAlign: 'center',
+            marginBottom: '40px',
           }}
         >
           Get in Touch
@@ -63,7 +64,7 @@ export const Section5: React.FC = () => {
 
         <Grid container spacing={4}>
           <Grid item xs={12} md={6}>
-            <Paper sx={{ padding: "30px", boxShadow: 3, borderRadius: "15px" }}>
+            <Paper sx={{ padding: '30px', boxShadow: 3, borderRadius: '15px' }}>
               <Typography
                 variant="h6"
                 gutterBottom
@@ -102,9 +103,9 @@ export const Section5: React.FC = () => {
                   variant="contained"
                   color="primary"
                   sx={{
-                    marginTop: "20px",
-                    borderRadius: "20px",
-                    textTransform: "none",
+                    marginTop: '20px',
+                    borderRadius: '20px',
+                    textTransform: 'none',
                   }}
                 >
                   Send Message
@@ -115,10 +116,10 @@ export const Section5: React.FC = () => {
           <Grid item xs={12} md={6}>
             <Paper
               sx={{
-                padding: "30px",
+                padding: '30px',
                 boxShadow: 3,
-                borderRadius: "15px",
-                marginBottom: "20px",
+                borderRadius: '15px',
+                marginBottom: '20px',
               }}
             >
               <Typography
@@ -130,14 +131,14 @@ export const Section5: React.FC = () => {
               </Typography>
               <Box
                 sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginBottom: "15px",
+                  display: 'flex',
+                  alignItems: 'center',
+                  marginBottom: '15px',
                 }}
               >
                 <EmailIcon
                   sx={{
-                    marginRight: "10px",
+                    marginRight: '10px',
                     color: theme.palette.primary.main,
                   }}
                 />
@@ -150,19 +151,19 @@ export const Section5: React.FC = () => {
               </Box>
               <Box
                 sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginBottom: "15px",
+                  display: 'flex',
+                  alignItems: 'center',
+                  marginBottom: '15px',
                 }}
               ></Box>
               <Typography
                 variant="h6"
                 gutterBottom
-                sx={{ color: theme.palette.text.primary, marginTop: "20px" }}
+                sx={{ color: theme.palette.text.primary, marginTop: '20px' }}
               >
                 Follow Us
               </Typography>
-              <Box sx={{ display: "flex", gap: "10px" }}>
+              <Box sx={{ display: 'flex', gap: '10px' }}>
                 <IconButton
                   color="primary"
                   href="https://www.linkedin.com"
@@ -186,7 +187,7 @@ export const Section5: React.FC = () => {
                 </IconButton>
               </Box>
             </Paper>
-            <Paper sx={{ padding: "30px", boxShadow: 3, borderRadius: "15px" }}>
+            <Paper sx={{ padding: '30px', boxShadow: 3, borderRadius: '15px' }}>
               <Typography
                 variant="h6"
                 gutterBottom
@@ -195,21 +196,21 @@ export const Section5: React.FC = () => {
                 Additional Resources
               </Typography>
               <Box
-                sx={{ display: "flex", flexDirection: "column", gap: "10px" }}
+                sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}
               >
                 <Link
                   component="button"
                   onClick={handleSnackbarOpen}
                   underline="none"
                   sx={{
-                    display: "flex",
-                    alignItems: "center",
+                    display: 'flex',
+                    alignItems: 'center',
                     color: theme.palette.text.secondary,
                   }}
                 >
                   <ArticleIcon
                     sx={{
-                      marginRight: "10px",
+                      marginRight: '10px',
                       color: theme.palette.primary.main,
                     }}
                   />
@@ -220,14 +221,14 @@ export const Section5: React.FC = () => {
                   onClick={handleSnackbarOpen}
                   underline="none"
                   sx={{
-                    display: "flex",
-                    alignItems: "center",
+                    display: 'flex',
+                    alignItems: 'center',
                     color: theme.palette.text.secondary,
                   }}
                 >
                   <HelpIcon
                     sx={{
-                      marginRight: "10px",
+                      marginRight: '10px',
                       color: theme.palette.primary.main,
                     }}
                   />
@@ -238,14 +239,14 @@ export const Section5: React.FC = () => {
                   onClick={handleSnackbarOpen}
                   underline="none"
                   sx={{
-                    display: "flex",
-                    alignItems: "center",
+                    display: 'flex',
+                    alignItems: 'center',
                     color: theme.palette.text.secondary,
                   }}
                 >
                   <BookIcon
                     sx={{
-                      marginRight: "10px",
+                      marginRight: '10px',
                       color: theme.palette.primary.main,
                     }}
                   />
@@ -259,16 +260,16 @@ export const Section5: React.FC = () => {
           open={snackbarOpen}
           autoHideDuration={3000}
           onClose={handleSnackbarClose}
-          anchorOrigin={{ vertical: "top", horizontal: "right" }} // Set position to top right
+          anchorOrigin={{ vertical: 'top', horizontal: 'right' }} // Set position to top right
         >
           <Alert
             onClose={handleSnackbarClose}
             severity="info"
             sx={{
-              width: "100%",
+              width: '100%',
               backgroundColor: theme.palette.primary.main,
               color: theme.palette.primary.contrastText,
-              "& .MuiAlert-icon": {
+              '& .MuiAlert-icon': {
                 color: theme.palette.primary.contrastText, // Set icon color to white
               },
             }}

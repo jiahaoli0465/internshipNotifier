@@ -6,7 +6,6 @@ import Home from './pages/Home';
 import Pricing from './pages/Pricing';
 import Contact from './pages/Contact';
 import Listings from './pages/Listings';
-import supabase from './config/supabaseClient';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import SubscriptionPage from './pages/SubscriptionPage';
