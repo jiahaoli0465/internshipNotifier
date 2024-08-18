@@ -30,7 +30,7 @@ const useSendText = (): UseSendTextReturn => {
         {
           phone: phoneNumber,
           message: message,
-          key: window.process.env.VITE_TEXTBELT_API_KEY,
+          key: import.meta.env.VITE_TEXTBELT_API_KEY,
         },
         {
           headers: { 'Content-Type': 'application/json' },
