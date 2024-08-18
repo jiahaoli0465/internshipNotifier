@@ -23,7 +23,7 @@ jobs:
         working-directory: ./workflow
 
       - name: Run scrape and insert script
-        run: node workflow/update_positions.js
+        run: node workflow/demo.js
         env:
           VITE_SUPA_URL: ${{ secrets.VITE_SUPA_URL }}
           VITE_SUPA_KEY: ${{ secrets.VITE_SUPA_KEY }}
