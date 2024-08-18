@@ -142,7 +142,8 @@ const insertData = async (postings) => {
 const getSubscribedUsers = async () => {
   const { data, error } = await supabase
     .from('subscriptions')
-    .select('phone_number');
+    .select('phone_number')
+    .limit(50);
 
   if (error) {
     console.error('Error fetching subscribed users:', error);
@@ -206,6 +207,10 @@ const notifyUsers = async (newPostings) => {
 
 const notifyUsersNoPostings = async () => {
   const users = await getSubscribedUsers();
+  if (users.length === 0) {
+    console.log('No subscribed users found');
+    return;
+  }
   for (const user of users) {
     if (user.phone_number) {
       const smsMessage = `No new internship opportunities found today.\n\nReply STOP to unsubscribe.`;
@@ -249,7 +254,9 @@ const run = async () => {
     }
   } else {
     console.log('No data to insert');
+    console.log('Notifying subscribed users...');
     await notifyUsersNoPostings();
+    console.log('Users notified');
   }
 };
 
