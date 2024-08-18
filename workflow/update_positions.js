@@ -251,12 +251,12 @@ const run = async () => {
       console.log('Users notified');
     } else {
       console.log('No new data to insert');
+      onsole.log('Notifying subscribed users...');
+      await notifyUsersNoPostings();
+      console.log('Users notified');
     }
   } else {
     console.log('No data to insert');
-    console.log('Notifying subscribed users...');
-    await notifyUsersNoPostings();
-    console.log('Users notified');
   }
 };
 
