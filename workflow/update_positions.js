@@ -204,6 +204,16 @@ const notifyUsers = async (newPostings) => {
     }
 };
 
+const notifyUsersNoPostings = async () => {
+  const users = await getSubscribedUsers();
+  for (const user of users) {
+    if (user.phone_number) {
+      const smsMessage = `No new internship opportunities found today.\n\nReply STOP to unsubscribe.`;
+      await sendSMS(user.phone_number, smsMessage);
+    }
+  }
+};
+
 const run = async () => {
   console.log('Fetching postings...');
   const postings = await fetchPostings();
@@ -239,7 +249,7 @@ const run = async () => {
     }
   } else {
     console.log('No data to insert');
-    await notifyUsers([]);
+    await notifyUsersNoPostings();
   }
 };
 
