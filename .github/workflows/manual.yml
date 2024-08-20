@@ -1,4 +1,4 @@
-name: Scrape and Insert Data
+name: Scrape and Notify last day
 
 on:
   workflow_dispatch: # Add this line to enable manual triggering
@@ -20,7 +20,7 @@ jobs:
         run: npm install
         working-directory: ./workflow
 
-      - name: Run scrape and insert script
+      - name: Run scrape and Notify last day
         run: node workflow/demo.js
         env:
           VITE_SUPA_URL: ${{ secrets.VITE_SUPA_URL }}
