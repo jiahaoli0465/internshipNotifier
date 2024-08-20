@@ -149,22 +149,10 @@ const getSubscribedUsers = async () => {
     console.error('Error fetching subscribed users:', error);
     return [];
   } else {
-    console.log('Subscribed users fetched:', data);
+    // console.log('Subscribed users fetched:', data);
   }
 
   return data;
-};
-
-const formatJobPostings = (postings) => {
-  if (postings.length === 0) {
-    return 'No new internship opportunities found today.';
-  }
-  return postings
-    .map(
-      (posting) =>
-        `${posting.company} - ${posting.role}\nLocation: ${posting.location}\nApply: ${posting.link}\nPosted: ${posting.date_posted}\n`
-    )
-    .join('\n');
 };
 
 const sendSMS = async (phoneNumber, message) => {
@@ -184,25 +172,60 @@ const sendSMS = async (phoneNumber, message) => {
     if (response.data.success) {
       console.log(`SMS sent to ${phoneNumber}`);
     } else {
-      console.error(
-        `Failed to send SMS to ${phoneNumber}: ${response.data.error}`
-      );
+      console.error(`Failed to send SMS to ${'###'}: ${response.data.error}`);
     }
   } catch (error) {
-    console.error(`Error sending SMS to ${phoneNumber}:`, error.message);
+    console.error(`Error sending SMS to ${'###'}:`, error.message);
   }
+};
+
+const MAX_POSTINGS_PER_SMS = 3;
+
+const formatJobPostings = (postings) => {
+  if (postings.length === 0) {
+    return 'No new internship opportunities found today.';
+  }
+  return postings
+    .map(
+      (posting) =>
+        `${posting.company} - ${posting.role}\nLocation: ${posting.location}\nApply: ${posting.link}\nPosted: ${posting.date_posted}\n`
+    )
+    .join('\n');
 };
 
 const notifyUsers = async (newPostings) => {
   const users = await getSubscribedUsers();
-  const formattedPostings = formatJobPostings(newPostings);
-  if (formattedPostings)
-    for (const user of users) {
-      if (user.phone_number) {
-        const smsMessage = `New internship opportunities:\n\n${formattedPostings}\n\nReply STOP to unsubscribe.`;
+  const totalPostings = newPostings.length;
+
+  for (const user of users) {
+    if (user.phone_number) {
+      let messageCount = 1;
+      for (let i = 0; i < totalPostings; i += MAX_POSTINGS_PER_SMS) {
+        const batch = newPostings.slice(i, i + MAX_POSTINGS_PER_SMS);
+        const formattedPostings = formatJobPostings(batch);
+
+        let smsMessage = `New internship opportunities (${messageCount} of ${Math.ceil(
+          totalPostings / MAX_POSTINGS_PER_SMS
+        )}):\n\n${formattedPostings}\n\n`;
+
+        if (i + MAX_POSTINGS_PER_SMS >= totalPostings) {
+          smsMessage += 'End of new postings.\n\n';
+        } else {
+          smsMessage += 'More opportunities in next message.\n\n';
+        }
+
+        if (messageCount === 1) {
+          smsMessage += 'Reply STOP to unsubscribe.';
+        }
+
         await sendSMS(user.phone_number, smsMessage);
+        messageCount++;
+
+        // Add a delay between messages to avoid rate limiting
+        await new Promise((resolve) => setTimeout(resolve, 1000));
       }
     }
+  }
 };
 
 const notifyUsersNoPostings = async () => {

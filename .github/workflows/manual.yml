@@ -1,0 +1,28 @@
+name: Scrape and Insert Data
+
+on:
+  workflow_dispatch: # Add this line to enable manual triggering
+
+jobs:
+  scrape-and-insert-data:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./workflow
+
+      - name: Run scrape and insert script
+        run: node workflow/demo.js
+        env:
+          VITE_SUPA_URL: ${{ secrets.VITE_SUPA_URL }}
+          VITE_SUPA_KEY: ${{ secrets.VITE_SUPA_KEY }}
+          VITE_TEXTBELT_API_KEY: ${{ secrets.VITE_TEXTBELT_API_KEY }}
