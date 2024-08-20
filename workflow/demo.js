@@ -203,8 +203,13 @@ const notifyUsers = async (recentPostings) => {
   }
 };
 
+// this is broken
 const filterPostingsByDate = (postings, dates) => {
   return postings.filter((posting) => dates.includes(posting.date_posted));
+};
+
+const filterPostingsByLastFiveCount = (postings) => {
+  return postings.slice(0, 5);
 };
 
 const run = async () => {
@@ -225,11 +230,12 @@ const run = async () => {
     day: 'numeric',
   });
 
-  console.log('Filtering postings for today and yesterday...');
-  const recentPostings = filterPostingsByDate(allPostings, [
-    todayFormatted,
-    yesterdayFormatted,
-  ]);
+  //   console.log('Filtering postings for today and yesterday...');
+  //   const recentPostings = filterPostingsByDate(allPostings, [
+  //     todayFormatted,
+  //     yesterdayFormatted,
+  //   ]);
+  const recentPostings = filterPostingsByLastFiveCount(allPostings);
 
   console.log('Recent postings found:', recentPostings.length);
 
