@@ -190,7 +190,7 @@ const SubscriptionPage: React.FC = () => {
                 required
                 fullWidth
                 name="phoneNumber"
-                label="Phone Number"
+                label="Phone Number, e.g. 1234567890, no - or +"
                 type="tel"
                 id="phoneNumber"
                 autoComplete="tel"
