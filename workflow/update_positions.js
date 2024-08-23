@@ -2,6 +2,7 @@ const axios = require('axios');
 const { unescape } = require('html-escaper');
 const cheerio = require('cheerio');
 const { createClient } = require('@supabase/supabase-js');
+const { parse, isAfter, subDays } = require('date-fns');
 
 // Supabase setup
 const supabaseUrl = process.env.VITE_SUPA_URL;
@@ -241,6 +242,12 @@ const notifyUsersNoPostings = async () => {
     }
   }
 };
+const parseDatePosted = (datePosted) => {
+  const today = new Date();
+  const thisYear = today.getFullYear();
+
+  return parse(datePosted + ` ${thisYear}`, 'MMM d yyyy', new Date());
+};
 
 const run = async () => {
   console.log('Fetching postings...');
@@ -251,8 +258,13 @@ const run = async () => {
     console.log('Fetching existing postings...');
     const existingPostings = await getExistingPostings();
     console.log('Existing postings fetched:', existingPostings.length);
+    const twoDaysAgo = subDays(new Date(), 2);
+    const recentPostings = postings.filter((posting) => {
+      const parsedDate = parseDatePosted(posting.date_posted);
+      return isAfter(parsedDate, twoDaysAgo);
+    });
 
-    const newPostings = postings.filter((posting) => {
+    const newPostings = recentPostings.filter((posting) => {
       return !existingPostings.some(
         (existing) =>
           existing.company === posting.company &&

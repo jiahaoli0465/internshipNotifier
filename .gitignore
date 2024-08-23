@@ -32,3 +32,6 @@ backend/dist/
 
 # Misc
 .history
+
+test.js
+recenttest.js
