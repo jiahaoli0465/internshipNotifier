@@ -171,7 +171,7 @@ const sendSMS = async (phoneNumber, message) => {
     );
 
     if (response.data.success) {
-      console.log(`SMS sent to ${phoneNumber}`);
+      // console.log(`SMS sent to ${phoneNumber}`);
     } else {
       console.error(`Failed to send SMS to ${'###'}: ${response.data.error}`);
     }
