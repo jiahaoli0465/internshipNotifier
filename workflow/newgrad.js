@@ -116,7 +116,7 @@ const fetchPostings = async () => {
 
 const formatJobPostings = (postings) => {
   if (postings.length === 0) {
-    return 'No recent internship opportunities found.';
+    return 'No recent new-grad opportunities found.';
   }
   return postings
     .map(
@@ -179,7 +179,7 @@ const notifyUsers = async (recentPostings) => {
         const batch = recentPostings.slice(i, i + MAX_POSTINGS_PER_SMS);
         const formattedPostings = formatJobPostings(batch);
 
-        let smsMessage = `Recent internship opportunities (${messageCount} of ${Math.ceil(
+        let smsMessage = `Recent new-grad opportunities (${messageCount} of ${Math.ceil(
           totalPostings / MAX_POSTINGS_PER_SMS
         )}):\n\n${formattedPostings}\n\n`;
 
